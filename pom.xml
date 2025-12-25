@@ -61,10 +61,11 @@
 		</dependency>
 
 		<dependency>
-    		<groupId>com.h2database</groupId>
-    		<artifactId>h2</artifactId>
-    		<scope>runtime</scope>
+  			<groupId>org.postgresql</groupId>
+  			<artifactId>postgresql</artifactId>
+  			<scope>runtime</scope>
 		</dependency>
+
 		<!-- すでにある他の dependency の中に追加 -->
 		<dependency>
     		<groupId>org.springframework.boot</groupId>

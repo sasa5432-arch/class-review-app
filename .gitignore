@@ -29,12 +29,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-# H2 database
-/data
-*.mv.db
-*.trace.db
-
-.DS_Store
 
 ### VS Code ###
 .vscode/

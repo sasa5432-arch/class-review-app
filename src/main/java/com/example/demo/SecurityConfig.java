@@ -28,12 +28,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // 開発中はとりあえずOFF
-            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin())) // H2コンソール用
+            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin())) 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/register",
                         "/login",
-                        "/h2-console/**",
                         "/css/**",
                         "/js/**"
                 ).permitAll()              // ここは誰でもOK

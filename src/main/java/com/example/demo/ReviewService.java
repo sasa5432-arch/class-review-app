@@ -97,11 +97,22 @@ public class ReviewService {
     // コメント関連
     // =========================
     public List<Comment> getComments(Review review) {
-        return commentRepository.findByReviewOrderByIdAsc(review);
+        return commentRepository.findByReviewAndParentCommentIsNullOrderByIdAsc(review);
     }
 
-    public void addComment(Review review, User user, String content) {
-        Comment c = new Comment(review, user, content);
+    public void addComment(Review review, User user, String content, String university, String faculty, String department) {
+        Comment c = new Comment(review, user, content, university, faculty, department);
+        commentRepository.save(c);
+    }
+
+    public Comment getCommentById(Long id) {
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Comment not found: " + id));
+    }
+
+    public void addReply(Review review, Comment parent, User user, String content, String university, String faculty, String department) {
+        Comment c = new Comment(review, user, content, university, faculty, department);
+        c.setParentComment(parent);
         commentRepository.save(c);
     }
 

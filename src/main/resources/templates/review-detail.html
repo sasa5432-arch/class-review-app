@@ -14,7 +14,11 @@
 
     <p class="text-muted">
         教員: <span th:text="*{teacherName}"></span> /
-        評価: <span th:text="*{rating}"></span> / 5
+        評価: <span th:text="*{rating}"></span> / 5 /
+        投稿日:
+        <span th:if="${review.createdAt != null}"
+              th:text="${#temporals.format(review.createdAt, 'yyyy/MM/dd HH:mm')}"></span>
+        <span th:if="${review.createdAt == null}">-</span>
     </p>
 
     <div class="mb-3" th:if="*{imagePath} != null">
@@ -35,10 +39,65 @@
         <li class="list-group-item" th:each="c : ${comments}">
             <strong th:text="${c.user.email}">user</strong> :
             <span th:text="${c.content}"></span>
+            <span class="text-muted small ms-2" th:if="${c.createdAt != null}"
+                  th:text="${#temporals.format(c.createdAt, 'yyyy/MM/dd HH:mm')}"></span>
+            <span class="text-muted small ms-2" th:if="${c.createdAt == null}">-</span>
+            <div class="text-muted small mt-1">
+                <span th:text="${c.university}">大学</span> /
+                <span th:text="${c.faculty}">学部</span> /
+                <span th:text="${c.department}">学科</span>
+            </div>
+            <ul class="list-group mt-2" th:if="${!#lists.isEmpty(c.replies)}">
+                <li class="list-group-item" th:each="r : ${c.replies}">
+                    <strong th:text="${r.user.email}">user</strong> :
+                    <span th:text="${r.content}"></span>
+                    <span class="text-muted small ms-2" th:if="${r.createdAt != null}"
+                          th:text="${#temporals.format(r.createdAt, 'yyyy/MM/dd HH:mm')}"></span>
+                    <span class="text-muted small ms-2" th:if="${r.createdAt == null}">-</span>
+                    <div class="text-muted small mt-1">
+                        <span th:text="${r.university}">大学</span> /
+                        <span th:text="${r.faculty}">学部</span> /
+                        <span th:text="${r.department}">学科</span>
+                    </div>
+                </li>
+            </ul>
+            <form class="mt-2"
+                  th:action="@{'/reviews/' + ${review.id} + '/comments/' + ${c.id} + '/replies'}"
+                  method="post">
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <input type="text" name="university" class="form-control form-control-sm" placeholder="大学" required>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <input type="text" name="faculty" class="form-control form-control-sm" placeholder="学部" required>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <input type="text" name="department" class="form-control form-control-sm" placeholder="学科" required>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <textarea name="content" class="form-control form-control-sm" rows="2" placeholder="返信を書く" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-sm btn-outline-primary">返信</button>
+            </form>
         </li>
     </ul>
 
     <form th:action="@{'/reviews/' + ${review.id} + '/comments'}" method="post">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">大学</label>
+                <input type="text" name="university" class="form-control" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">学部</label>
+                <input type="text" name="faculty" class="form-control" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">学科</label>
+                <input type="text" name="department" class="form-control" required>
+            </div>
+        </div>
         <div class="mb-3">
             <label class="form-label">コメントを書く</label>
             <textarea name="content" class="form-control" rows="3" required></textarea>

@@ -65,6 +65,12 @@
                             教員:
                             <span th:text="${r.teacherName}">先生</span>
                         </h6>
+                        <div class="text-muted small mb-2">
+                            投稿日:
+                            <span th:if="${r.createdAt != null}"
+                                  th:text="${#temporals.format(r.createdAt, 'yyyy/MM/dd HH:mm')}"></span>
+                            <span th:if="${r.createdAt == null}">-</span>
+                        </div>
 
                         <!-- 星で評価を表示 -->
                         <div class="mb-1">

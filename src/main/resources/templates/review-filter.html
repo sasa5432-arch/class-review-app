@@ -54,6 +54,12 @@
                         <h6 class="card-subtitle mb-2 text-muted">
                             教員: <span th:text="${r.teacherName}"></span>
                         </h6>
+                        <div class="text-muted small mb-2">
+                            投稿日:
+                            <span th:if="${r.createdAt != null}"
+                                  th:text="${#temporals.format(r.createdAt, 'yyyy/MM/dd HH:mm')}"></span>
+                            <span th:if="${r.createdAt == null}">-</span>
+                        </div>
                         <p class="mb-1">
                             評価:
                             <span th:text="${r.rating}"></span> / 5

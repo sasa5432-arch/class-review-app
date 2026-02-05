@@ -205,10 +205,32 @@ public class ReviewController {
 
     // コメント投稿
     @PostMapping("/reviews/{id}/comments")
-    public String addComment(@PathVariable Integer id, @RequestParam String content) {
+    public String addComment(@PathVariable Integer id,
+                             @RequestParam String content,
+                             @RequestParam String university,
+                             @RequestParam String faculty,
+                             @RequestParam String department) {
         User user = getCurrentUser();
         Review review = service.getById(id);
-        service.addComment(review, user, content);
+        service.addComment(review, user, content, university, faculty, department);
+        return "redirect:/reviews/" + id;
+    }
+
+    // コメントへの返信
+    @PostMapping("/reviews/{id}/comments/{commentId}/replies")
+    public String addReply(@PathVariable Integer id,
+                           @PathVariable Long commentId,
+                           @RequestParam String content,
+                           @RequestParam String university,
+                           @RequestParam String faculty,
+                           @RequestParam String department) {
+        User user = getCurrentUser();
+        Review review = service.getById(id);
+        Comment parent = service.getCommentById(commentId);
+        if (!parent.getReview().getId().equals(review.getId())) {
+            return "redirect:/reviews/" + id;
+        }
+        service.addReply(review, parent, user, content, university, faculty, department);
         return "redirect:/reviews/" + id;
     }
     @GetMapping("/reviews/by-course")

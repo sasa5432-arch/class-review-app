@@ -1,11 +1,14 @@
 package com.example.demo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import java.time.LocalDateTime;
 
 @Entity
 public class Review {
@@ -18,6 +21,9 @@ public class Review {
     private String teacherName;
     private int rating;
     private String comment;
+
+    @Column
+    private LocalDateTime createdAt;
 
     // ログインユーザーとの紐づけ
     @ManyToOne
@@ -54,6 +60,10 @@ public class Review {
         return comment;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
     public User getUser() {
         return user;
     }
@@ -76,6 +86,12 @@ public class Review {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    @PrePersist
+    private void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
     }
     // 既存フィールドの下あたりに追加
     private String imagePath;
